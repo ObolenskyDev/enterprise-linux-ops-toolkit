@@ -3,16 +3,16 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "enterprise-linux-ops-toolkit"
+name = "ops-core-utils"
 version = "0.1.0"
-description = "Unified toolkit: linux triage + KESL log analyzer modules"
+description = "CLI toolkit: Linux triage, KESL logs, network checks, DB helpers, log maintenance"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
 authors = [{ name = "N7" }]
 
 [project.scripts]
-elot = "elotoolkit.cli:main"
+elot = "ops_toolkit.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

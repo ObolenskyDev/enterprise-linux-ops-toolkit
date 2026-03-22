@@ -2,12 +2,12 @@ import argparse
 import os
 import sys
 
-from elotoolkit.modules.kesl_log_analyzer import analyze_trace
-from elotoolkit.modules.linux_triage import proc_monitor
-from elotoolkit.modules.network_ssl_tools import tcp_ping
-from elotoolkit.modules.db_incident_helper import slow_query_parser
-from elotoolkit.modules.routine import backup_configs, clear_logs, health_check
-from elotoolkit.modules.log_maintenance import rotate as log_rotate
+from ops_toolkit.modules.kesl_log_analyzer import analyze_trace
+from ops_toolkit.modules.linux_triage import proc_monitor
+from ops_toolkit.modules.network_ssl_tools import tcp_ping
+from ops_toolkit.modules.db_incident_helper import slow_query_parser
+from ops_toolkit.modules.routine import backup_configs, clear_logs, health_check
+from ops_toolkit.modules.log_maintenance import rotate as log_rotate
 
 
 def _add_triage(subparsers: argparse._SubParsersAction) -> None:
@@ -78,7 +78,7 @@ def _add_logs(subparsers: argparse._SubParsersAction) -> None:
 def main(argv: list[str] | None = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
 
-    parser = argparse.ArgumentParser(prog="elot", description="Enterprise Linux Ops Toolkit")
+    parser = argparse.ArgumentParser(prog="elot", description="Linux ops CLI toolkit (ops-core-utils)")
     subparsers = parser.add_subparsers(dest="module", required=True)
 
     _add_triage(subparsers)
