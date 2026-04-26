@@ -23,15 +23,14 @@ def _get_proc_stats(pid: int) -> tuple[int | None, int | None]:
 
 def run(pid: int, interval: float = 1.0) -> int:
     if not os.path.exists(f"/proc/{pid}"):
-        print(f"Ошибка: PID {pid} не найден.")
+        print(f"[error] PID {pid} not found.")
         return 1
 
     page_size_kb = _get_page_size_kb()
 
-    print(f"[*] Старт мониторинга PID {pid}.")
-    print(f"[*] Интервал: {interval} сек. | Размер страницы: {page_size_kb} KB")
+    print(f"[*] Monitoring PID {pid} | interval: {interval}s | page size: {page_size_kb} KB")
     print("-" * 55)
-    print(f"{'Время':<10} | {'RSS Память (KB)':<18} | {'CPU (Delta Ticks)':<15}")
+    print(f"{'Time':<10} | {'RSS (KB)':<18} | {'CPU (delta ticks)':<15}")
     print("-" * 55)
 
     prev_ticks = -1
@@ -39,7 +38,7 @@ def run(pid: int, interval: float = 1.0) -> int:
         while True:
             curr_ticks, rss_pages = _get_proc_stats(pid)
             if curr_ticks is None:
-                print(f"\n[!] Процесс {pid} завершился или исчез.")
+                print(f"\n[info] PID {pid} exited.")
                 return 0
 
             cpu_delta = 0 if prev_ticks == -1 else curr_ticks - prev_ticks
@@ -50,6 +49,6 @@ def run(pid: int, interval: float = 1.0) -> int:
             print(f"{timestamp:<10} | {rss_kb:<18} | {cpu_delta:<15}")
             time.sleep(interval)
     except KeyboardInterrupt:
-        print("\nМониторинг остановлен пользователем.")
+        print("\n[info] Stopped.")
         return 0
 

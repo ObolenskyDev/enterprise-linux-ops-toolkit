@@ -57,6 +57,7 @@ def _add_routine(subparsers: argparse._SubParsersAction) -> None:
     cl.add_argument("dir")
     cl.add_argument("--days", type=int, default=7)
     cl.add_argument("--suffix", default=".log")
+    cl.add_argument("--dry-run", action="store_true", default=False)
 
     bc = routine_sub.add_parser("backup-configs", help="Create tar.gz backup of a directory/file")
     bc.add_argument("source")
@@ -109,7 +110,7 @@ def main(argv: list[str] | None = None) -> int:
         return health_check.run(urls=args.urls, timeout=args.timeout)
 
     if args.module == "routine" and args.routine_cmd == "clear-logs":
-        return clear_logs.run(log_dir=args.dir, days=args.days, pattern_suffix=args.suffix)
+        return clear_logs.run(log_dir=args.dir, days=args.days, pattern_suffix=args.suffix, dry_run=args.dry_run)
 
     if args.module == "routine" and args.routine_cmd == "backup-configs":
         return backup_configs.run(source=args.source, backup_dir=args.backup_dir, name=args.name)

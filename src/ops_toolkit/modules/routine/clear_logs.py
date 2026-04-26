@@ -4,7 +4,7 @@ import os
 import time
 
 
-def run(log_dir: str, days: int = 7, pattern_suffix: str = ".log") -> int:
+def run(log_dir: str, days: int = 7, pattern_suffix: str = ".log", dry_run: bool = False) -> int:
     if not os.path.isdir(log_dir):
         print(f"[error] Directory not found: {log_dir}")
         return 2
@@ -17,13 +17,16 @@ def run(log_dir: str, days: int = 7, pattern_suffix: str = ".log") -> int:
         for name in files:
             if pattern_suffix and not name.endswith(pattern_suffix):
                 continue
-            scanned += 1
             path = os.path.join(root, name)
             try:
                 st = os.stat(path)
                 if st.st_mtime < cutoff:
-                    os.remove(path)
-                    deleted += 1
+                    scanned += 1
+                    if dry_run:
+                        print(f"[dry-run] would delete: {path}")
+                    else:
+                        os.remove(path)
+                        deleted += 1
             except FileNotFoundError:
                 continue
             except PermissionError:
@@ -32,9 +35,10 @@ def run(log_dir: str, days: int = 7, pattern_suffix: str = ".log") -> int:
                 print(f"[warn] Failed to delete {path}: {e}")
 
     print(f"--- [ROUTINE] Log cleanup ---")
-    print(f"Dir: {log_dir}")
-    print(f"Days: {days}")
-    print(f"Matched files: {scanned}")
-    print(f"Deleted: {deleted}")
+    print(f"Dir: {log_dir} | Days: {days} | Suffix: {pattern_suffix}")
+    if dry_run:
+        print(f"[dry-run] Would delete: {scanned} file(s)")
+    else:
+        print(f"Deleted: {deleted} file(s)")
     return 0
 
